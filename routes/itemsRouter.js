@@ -1,9 +1,6 @@
 import { Router } from "express";
-import { Item } from "../models/Item.js";
+import { index } from "../controllers/itemController.js";
 
 export const itemsRouter = Router();
 
-itemsRouter.get("/", async (_req, res) => {
-  console.log(await Item.findAll());
-  res.end();
-});
+itemsRouter.get("/", index);
