@@ -16,8 +16,20 @@ const validateItem = [
 ];
 
 export const index = async (_req, res) => {
-  const items = Item.findAll();
+  const items = await Item.findAll();
   console.log(items);
+  res.end();
+};
+
+export const show = async (req, res) => {
+  const id = req.params.id;
+  const item = await Item.findById(id);
+
+  if (!item) {
+    throw new AppError("No Item with this ID was found", 404);
+  }
+
+  console.log(item);
   res.end();
 };
 
