@@ -4,6 +4,7 @@ import { indexRouter } from "./routes/indexRouter.js";
 import { loadEnvFile } from "node:process";
 import { categoriesRouter } from "./routes/categoriesRouter.js";
 import { itemsRouter } from "./routes/itemsRouter.js";
+import { globalErrorHandler } from "./middleware/globalErrorHandler.js";
 
 try {
   loadEnvFile();
@@ -24,21 +25,7 @@ app.use("/", indexRouter);
 app.use("/categories", categoriesRouter);
 app.use("/items", itemsRouter);
 
-app.use((err, req, res, _next) => {
-  const errorStatus = err.statusCode || 500;
-  const errorMessage = err.message;
-  res.status(errorStatus);
-
-  if (errorStatus === 500) {
-    res.render("error-page", {
-      errorStatus: errorStatus,
-      errorMessage: "The server was unable to complete your request. Please try again later.",
-    });
-    console.log(err.message);
-  } else {
-    res.render("error-page", { errorStatus: errorStatus, errorMessage: errorMessage });
-  }
-});
+app.use(globalErrorHandler);
 
 app.listen(PORT, () => {
   console.log(`Listening at localhost:${PORT}`);

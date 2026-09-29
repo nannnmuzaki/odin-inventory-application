@@ -1,9 +1,6 @@
 import { Router } from "express";
-import { Category } from "../models/Category.js";
+import { index } from "../controllers/categoryController.js";
 
 export const categoriesRouter = Router();
 
-categoriesRouter.get("/", async (_req, res) => {
-  console.log(await Category.findAll());
-  res.end();
-});
+categoriesRouter.get("/", index);
