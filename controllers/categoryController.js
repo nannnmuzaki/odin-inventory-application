@@ -8,10 +8,52 @@ const validateCategory = [
   body("name").trim().isLength({ min: 1, max: 255 }).withMessage(nameError),
 ];
 
-export const index = async (_req, res) => {
-  const categories = await Category.findAll();
-  console.log(categories);
-  res.end();
+// Helper function to build page window pagination
+function getPaginationRange(current, total, delta = 2) {
+  const range = [];
+  const rangeWithDots = [];
+  let l;
+
+  for (let i = 1; i <= total; i++) {
+    // Keep first, last, and pages within 'delta' distance from current page
+    if (i === 1 || i === total || (i >= current - delta && i <= current + delta)) {
+      range.push(i);
+    }
+  }
+
+  for (let i of range) {
+    if (l) {
+      if (i - l === 2) {
+        rangeWithDots.push(l + 1);
+      } else if (i - l !== 1) {
+        rangeWithDots.push("...");
+      }
+    }
+    rangeWithDots.push(i);
+    l = i;
+  }
+
+  return rangeWithDots;
+}
+
+export const index = async (req, res) => {
+  const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+  const limit = Math.max(1, parseInt(req.query.limit, 10) || 32);
+
+  const { categories, totalCount } = await Category.findAndCountAll(page, limit);
+  const totalPages = Math.ceil(totalCount / limit) || 1;
+
+  // Build truncated page window (e.g., [1, '...', 4, 5, 6, '...', 50])
+  const paginationRange = getPaginationRange(page, totalPages);
+
+  res.render("categories/index", {
+    categories,
+    currentPage: page,
+    totalPages,
+    hasNextPage: page < totalPages,
+    hasPrevPage: page > 1,
+    paginationRange,
+  });
 };
 
 export const show = async (req, res) => {

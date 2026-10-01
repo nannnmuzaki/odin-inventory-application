@@ -18,13 +18,17 @@ main {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  padding-block: 2rem;
-  padding-inline: 2rem;
-  align-items: center;
+  margin-block: 2rem;
+  margin-inline: 4rem;
+
+  @media (max-width: 1000px) {
+    margin-block: 1rem;
+    margin-inline: 2rem;
+  }
 
   @media (max-width: 500px) {
-    padding-block: 1rem;
-    padding-inline: 1.2rem;
+    margin-block: 1rem;
+    margin-inline: 1.2rem;
   }
 }
 
@@ -34,6 +38,8 @@ main h1 {
   @media (max-width: 500px) {
     font-size: 20px;
   }
+
+  margin-bottom: 1rem;
 }
 
 header {
@@ -121,4 +127,84 @@ footer {
 
 .error-page > h1 {
   margin-bottom: 0.6rem;
+}
+
+.empty {
+  font-size: 16px;
+  width: fit-content;
+  margin-inline: auto;
+}
+
+.categories {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+
+  @media (max-width: 1000px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 500px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  gap: 1rem;
+}
+
+.category {
+  display: flex;
+  flex-direction: column;
+  color: inherit;
+  text-decoration: none;
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid black;
+  word-break: break-all;
+}
+
+.category:hover {
+  cursor: pointer;
+  background-color: rgba(1, 1, 1, 0.1);
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+  margin-left: auto;
+}
+
+.page-link {
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 14px;
+  color: #000;
+  background-color: #fff;
+  border: 1px solid #000;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.page-link:hover:not(.disabled):not(.active) {
+  background-color: #f0f0f0;
+}
+
+.page-link.active {
+  background-color: #000;
+  color: #fff;
+  font-weight: bold;
+}
+
+.page-link.disabled {
+  color: #999;
+  border-color: #ccc;
+  cursor: not-allowed;
+}
+
+.page-link.ellipsis {
+  border: none;
+  background: transparent;
+  cursor: default;
+  padding: 6px 6px;
 }
