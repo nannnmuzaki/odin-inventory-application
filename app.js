@@ -17,7 +17,12 @@ app.set("views", path.join(import.meta.dirname, "views"));
 app.set("view engine", "ejs");
 
 const assetsPath = path.join(import.meta.dirname, "public");
-app.use(express.static(assetsPath, { maxAge: "1d" }));
+app.use(
+  express.static(
+    assetsPath,
+    process.env.NODE_ENV === "production" ? { maxAge: "1d" } : { maxAge: 0 },
+  ),
+);
 
 app.use(express.urlencoded({ extended: true }));
 
