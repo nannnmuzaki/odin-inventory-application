@@ -5,6 +5,7 @@ import { loadEnvFile } from "node:process";
 import { categoriesRouter } from "./routes/categoriesRouter.js";
 import { itemsRouter } from "./routes/itemsRouter.js";
 import { globalErrorHandler } from "./middleware/globalErrorHandler.js";
+import { unmatchedRouteErrorHandler } from "./middleware/unmatchedRouteErrorHandler.js";
 
 try {
   loadEnvFile();
@@ -30,6 +31,7 @@ app.use("/", indexRouter);
 app.use("/categories", categoriesRouter);
 app.use("/items", itemsRouter);
 
+app.use(unmatchedRouteErrorHandler);
 app.use(globalErrorHandler);
 
 app.listen(PORT, () => {
