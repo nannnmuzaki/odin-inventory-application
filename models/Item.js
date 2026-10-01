@@ -20,6 +20,27 @@ export const Item = {
     return rows[0];
   },
 
+  async findByCategoryId(id, page, limit) {
+    const offset = (page - 1) * limit;
+
+    const { rows } = await pool.query(
+      `
+      SELECT id, category_id, name, description, image_url, created_at, updated_at,
+      COUNT(id) OVER() as total_count
+      FROM items
+      WHERE category_id = $1
+      ORDER BY id ASC
+      LIMIT $2 OFFSET $3
+      `,
+      [id, limit, offset],
+    );
+
+    const totalCount = rows.length > 0 ? parseInt(rows[0].total_count, 10) : 0;
+    const items = rows.map(({ total_count, ...item }) => item); // oxlint-disable-line
+
+    return { totalCount, items };
+  },
+
   async create(categoryId, name, description, imageUrl = null) {
     const { rows } = await pool.query(
       `INSERT INTO items(id, category_id, name, description, image_url)

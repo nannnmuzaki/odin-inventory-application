@@ -2,7 +2,7 @@ import { pool } from "../db/pool.js";
 import { randomUUIDv7 } from "node:crypto";
 
 export const Category = {
-  async findAndCountAll(page = 1, limit = 32) {
+  async findAll(page = 1, limit = 32) {
     const offset = (page - 1) * limit;
 
     const { rows } = await pool.query(

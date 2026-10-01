@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Category: <%= category.name %> | Odin Inventory Application</title>
+  </head>
+  <body>
+    <div class="root">
+      <%- include("../partials/header") %>
+      <main>
+        <h1>Category: <%= category.name %></h1>
+        <div class="categories">
+          <% if (items.length > 0) { %>
+            <% items.forEach(item => { %>
+              <a href="items/<%- item.id %>" class="category"><%= item.name %></a>
+            <% }) %>
+          <% } else { %>
+            <p class="empty">There's no items in this category yet, start adding new item</p>
+          <% } %>
+        </div>
+        <%- include("../partials/pagination") %>
+      </main>
+      <%- include("../partials/footer") %>
+    </div>
+  </body>
+</html>
