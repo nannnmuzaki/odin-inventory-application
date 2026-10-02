@@ -2,12 +2,26 @@ import { pool } from "../db/pool.js";
 import { randomUUIDv7 } from "node:crypto";
 
 export const Item = {
-  async findAll() {
+  async findAll(page = 1, limit = 32) {
+    const offset = (page - 1) * limit;
+
     const { rows } = await pool.query(
-      `SELECT id, category_id, name, description, image_url, created_at, updated_at
-       FROM items`,
+      `
+      SELECT items.id, items.category_id, categories.name, items.name,
+      items.description,items.image_url, items.created_at, items.updated_at,
+      COUNT(items.id) OVER() as total_count
+      FROM items
+      LEFT JOIN categories ON items.category_id = categories.id
+      ORDER BY id ASC
+      LIMIT $1 OFFSET $2
+      `,
+      [limit, offset],
     );
-    return rows;
+
+    const totalCount = rows.length > 0 ? parseInt(rows[0].total_count, 10) : 0;
+    const items = rows.map(({ total_count, ...item }) => item); // oxlint-disable-line
+
+    return { items, totalCount };
   },
 
   async findById(id) {

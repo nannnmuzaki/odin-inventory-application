@@ -1,6 +1,7 @@
 import { AppError } from "../errors/AppError.js";
 import { Item } from "../models/Item.js";
 import { body, matchedData, validationResult } from "express-validator";
+import { getPaginationRange } from "../utils/getPaginationRange.js";
 
 const nameError = "Name is required and max 255 characters";
 const categoryIdError = "Invalid category ID format";
@@ -15,10 +16,22 @@ const validateItem = [
   body("imageUrl").optional({ values: "falsy" }).isURL().withMessage(imageUrlError),
 ];
 
-export const index = async (_req, res) => {
-  const items = await Item.findAll();
-  console.log(items);
-  res.end();
+export const index = async (req, res) => {
+  const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+  const limit = Math.max(1, parseInt(req.query.limit, 10) || 32);
+
+  const { items, totalCount } = await Item.findAll(page, limit);
+  const totalPages = Math.ceil(totalCount / limit) || 1;
+  const paginationRange = getPaginationRange(page, totalPages);
+
+  res.render("items/index", {
+    items,
+    currentPage: page,
+    totalPages,
+    hasNextPage: page < totalPages,
+    hasPrevPage: page > 1,
+    paginationRange,
+  });
 };
 
 export const show = async (req, res) => {

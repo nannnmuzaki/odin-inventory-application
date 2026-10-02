@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { destroy, index, show, store, update } from "../controllers/itemController.js";
+import { index, show, store, update, destroy } from "../controllers/itemController.js";
 
 export const itemsRouter = Router();
 

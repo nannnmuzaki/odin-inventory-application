@@ -135,7 +135,8 @@ footer {
   margin-inline: auto;
 }
 
-.categories {
+.categories,
+.items {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
 
@@ -149,7 +150,8 @@ footer {
   gap: 1rem;
 }
 
-.category {
+.category,
+.item {
   display: flex;
   flex-direction: column;
   color: inherit;
