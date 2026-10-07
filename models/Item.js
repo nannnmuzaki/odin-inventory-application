@@ -8,7 +8,7 @@ export const Item = {
     const { rows } = await pool.query(
       `
       SELECT items.id, items.category_id, categories.name, items.name,
-      items.description,items.image_url, items.created_at, items.updated_at,
+      items.description, items.stock, items.image_url, items.created_at, items.updated_at,
       COUNT(items.id) OVER() as total_count
       FROM items
       LEFT JOIN categories ON items.category_id = categories.id
@@ -26,7 +26,7 @@ export const Item = {
 
   async findById(id) {
     const { rows } = await pool.query(
-      `SELECT id, category_id, name, description, image_url, created_at, updated_at
+      `SELECT id, category_id, name, description, stock, image_url, created_at, updated_at
        FROM items
        WHERE id = $1`,
       [id],
@@ -39,7 +39,7 @@ export const Item = {
 
     const { rows } = await pool.query(
       `
-      SELECT id, category_id, name, description, image_url, created_at, updated_at,
+      SELECT id, category_id, name, description, stock, image_url, created_at, updated_at,
       COUNT(id) OVER() as total_count
       FROM items
       WHERE category_id = $1
@@ -55,24 +55,24 @@ export const Item = {
     return { totalCount, items };
   },
 
-  async create(categoryId, name, description, imageUrl = null) {
+  async create(categoryId, name, description, stock, imageUrl = null) {
     const { rows } = await pool.query(
-      `INSERT INTO items(id, category_id, name, description, image_url)
-       VALUES($1, $2, $3, $4)
+      `INSERT INTO items(id, category_id, name, description, stock, image_url)
+       VALUES($1, $2, $3, $4, $5)
        RETURNING *`,
-      [randomUUIDv7(), categoryId, name, description, imageUrl],
+      [randomUUIDv7(), categoryId, name, description, stock, imageUrl],
     );
 
     return rows[0];
   },
 
-  async update(id, categoryId, name, description, imageUrl = null) {
+  async update(id, categoryId, name, description, stock, imageUrl = null) {
     const { rows } = await pool.query(
       `UPDATE items
-       SET category_id = $2, name = $3, description = $4, image_url = $5, updated_at = NOW()
+       SET category_id = $2, name = $3, description = $4, stock = $5, image_url = $6, updated_at = NOW()
        WHERE id = $1
        RETURNING *`,
-      [id, categoryId, name, description, imageUrl],
+      [id, categoryId, name, description, stock, imageUrl],
     );
 
     return rows[0];

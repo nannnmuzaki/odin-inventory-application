@@ -6,12 +6,14 @@ import { getPaginationRange } from "../utils/getPaginationRange.js";
 const nameError = "Name is required and max 255 characters";
 const categoryIdError = "Invalid category ID format";
 const descriptionError = "Description is required and max 1000 characters";
+const stockError = "Stock is required and must be an Integer";
 const imageUrlError = "Image URL is optional and need to be a valid URL of an image";
 
 const validateItem = [
   body("name").trim().isLength({ min: 1, max: 255 }).withMessage(nameError),
   body("categoryId").trim().isUUID(7).withMessage(categoryIdError),
   body("description").trim().isLength({ min: 1, max: 1000 }).withMessage(descriptionError),
+  body("stock").trim().toInt().isInt({ min: 0 }).withMessage(stockError),
   body("imageUrl").trim(),
   body("imageUrl").optional({ values: "falsy" }).isURL().withMessage(imageUrlError),
 ];
@@ -56,8 +58,8 @@ export const store = [
       return res.status(400).end();
     }
 
-    const { categoryId, name, description, imageUrl } = matchedData(req);
-    const createdItem = await Item.create(categoryId, name, description, imageUrl);
+    const { categoryId, name, description, stock, imageUrl } = matchedData(req);
+    const createdItem = await Item.create(categoryId, name, description, stock, imageUrl);
     console.log(createdItem);
     res.end();
   },
@@ -74,8 +76,8 @@ export const update = [
       return res.status(400).end();
     }
 
-    const { categoryId, name, description, imageUrl } = matchedData(req);
-    const updatedItem = await Item.update(id, categoryId, name, description, imageUrl);
+    const { categoryId, name, description, stock, imageUrl } = matchedData(req);
+    const updatedItem = await Item.update(id, categoryId, name, description, stock, imageUrl);
 
     if (!updatedItem) {
       throw new AppError("No Item with this ID was found", 404);
