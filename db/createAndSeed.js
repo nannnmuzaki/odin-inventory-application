@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS items (
   id UUID PRIMARY KEY NOT NULL,
   category_id UUID,
   name VARCHAR(255) NOT NULL,
+  stock INTEGER NOT NULL,
   description TEXT NOT NULL,
   image_url TEXT DEFAULT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -57,11 +58,11 @@ async function main() {
     const { rows } = await client.query(populateCategoriesTableSql);
     await client.query(
       `
-      INSERT INTO items (id, category_id, name, description)
+      INSERT INTO items (id, category_id, name, description, stock)
       VALUES
-        ('${randomUUIDv7()}', $1, 'NVIDIA CESPLENK', 'BEST GPU ON EARTH WORTH HUNNID DOLLARS'),
-        ('${randomUUIDv7()}', $2, 'AMD FX', 'HOTTEST CPU ON EARTH FR'),
-        ('${randomUUIDv7()}', $3, 'SAMSUNG', 'RAM FROM YOUR SCHOOL PC');
+        ('${randomUUIDv7()}', $1, 'NVIDIA CESPLENK', 'BEST GPU ON EARTH WORTH HUNNID DOLLARS', 4),
+        ('${randomUUIDv7()}', $2, 'AMD FX', 'HOTTEST CPU ON EARTH FR', 5),
+        ('${randomUUIDv7()}', $3, 'SAMSUNG', 'RAM FROM YOUR SCHOOL PC', 10);
       `,
       rows.map((row) => row.id),
     );
