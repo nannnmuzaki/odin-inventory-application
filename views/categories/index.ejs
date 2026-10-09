@@ -9,11 +9,14 @@
     <div class="root">
       <%- include("../partials/header") %>
       <main>
-        <h1>Categories</h1>
+        <div class="page-heading">
+          <h1>Categories</h1>
+          <a class="new-btn" href="/categories/create">New Category</a>
+        </div>
         <div class="categories">
           <% if (categories.length > 0) { %>
             <% categories.forEach(category => { %>
-              <a href="categories/<%- category.id %>" class="category"><%= category.name %></a>
+              <a href="/categories/<%- category.id %>" class="category"><%= category.name %></a>
             <% }) %>
           <% } else { %>
             <p class="empty">There's no categories yet, start adding new category</p>

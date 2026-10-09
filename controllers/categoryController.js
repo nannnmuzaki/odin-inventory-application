@@ -27,6 +27,7 @@ export const index = async (req, res) => {
     hasNextPage: page < totalPages,
     hasPrevPage: page > 1,
     paginationRange,
+    basePath: "/categories",
   });
 };
 
@@ -55,6 +56,14 @@ export const show = async (req, res) => {
     hasNextPage: page < totalPages,
     hasPrevPage: page > 1,
     paginationRange,
+    basePath: `/categories/${category.id}`,
+  });
+};
+
+export const create = async (_req, res) => {
+  res.render("categories/create-category", {
+    formType: "create",
+    category: null,
   });
 };
 
@@ -64,28 +73,44 @@ export const store = [
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      // console.log(errors.array());
-      console.log(errors);
+      return res.status(400).render("categories/create-category", {
+        formType: "create",
+        errors: errors.array(),
+        category: req.body,
+      });
     }
 
-    console.log(matchedData(req));
     const { name } = matchedData(req);
 
     try {
-      const createdCategory = await Category.create(name);
-      console.log(createdCategory);
-      res.end();
+      await Category.create(name);
+      res.redirect("/categories");
     } catch (err) {
       if (err.code === "23505") {
-        console.log({
+        return res.status(400).render("categories/create-category", {
+          formType: "create",
           errors: [{ path: "name", msg: "A category with this name already exists" }],
+          category: req.body,
         });
-        return res.end();
       }
       throw err;
     }
   },
 ];
+
+export const edit = async (req, res) => {
+  const id = req.params.id;
+  const category = await Category.findById(id);
+
+  if (!category) {
+    throw new AppError("No Category with this ID was found", 404);
+  }
+
+  res.render("categories/edit-category", {
+    formType: "edit",
+    category,
+  });
+};
 
 export const update = [
   validateCategory,
@@ -94,11 +119,13 @@ export const update = [
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      // console.log(errors.array());
-      console.log(errors);
+      return res.status(400).render("categories/edit-category", {
+        formType: "edit",
+        errors: errors.array(),
+        category: { id, ...req.body },
+      });
     }
 
-    console.log(matchedData(req));
     const { name } = matchedData(req);
 
     try {
@@ -108,14 +135,14 @@ export const update = [
         throw new AppError("No Category with this ID was found", 404);
       }
 
-      console.log(updatedCategory);
-      res.end();
+      res.redirect(`/categories/${id}`);
     } catch (err) {
       if (err.code === "23505") {
-        console.log({
+        return res.status(400).render("categories/edit-category", {
+          formType: "edit",
           errors: [{ path: "name", msg: "A category with this name already exists" }],
+          category: { id, ...req.body },
         });
-        return res.end();
       }
       throw err;
     }
@@ -130,6 +157,5 @@ export const destroy = async (req, res) => {
     throw new AppError("No Category with this ID was found", 404);
   }
 
-  console.log(deletedCategory);
-  res.end();
+  res.redirect("/categories");
 };

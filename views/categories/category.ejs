@@ -9,11 +9,24 @@
     <div class="root">
       <%- include("../partials/header") %>
       <main>
-        <h1>Category: <%= category.name %></h1>
+        <div class="page-heading">
+          <h1>Category: <%= category.name %></h1>
+          <div class="heading-actions">
+            <a class="new-btn" href="/categories/<%= category.id %>/edit">Edit</a>
+            <form method="POST" action="/categories/<%= category.id %>/delete" class="inline-delete"
+              onsubmit="return confirm('Delete this category? Items will keep NULL category.');">
+              <button type="submit" class="new-btn delete-btn">Delete</button>
+            </form>
+          </div>
+        </div>
+        <div class="page-heading sub">
+          <h2>Items in this category</h2>
+          <a class="new-btn" href="/items/create">New Item</a>
+        </div>
         <div class="items">
           <% if (items.length > 0) { %>
             <% items.forEach(item => { %>
-              <a href="items/<%- item.id %>" class="item"><%= item.name %></a>
+              <a href="/items/<%- item.id %>" class="item"><%= item.name %></a>
             <% }) %>
           <% } else { %>
             <p class="empty">There's no items in this category yet, start adding new item</p>
