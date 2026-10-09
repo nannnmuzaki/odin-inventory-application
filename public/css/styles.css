@@ -258,6 +258,14 @@ footer {
   padding: 6px 6px;
 }
 
+.item-page {
+  width: 100%;
+  max-width: 500px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+}
+
 .page-heading {
   display: flex;
   justify-content: space-between;
