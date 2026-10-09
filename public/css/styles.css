@@ -43,14 +43,10 @@ main h1 {
 }
 
 header {
-  font-size: 16px;
-
-  @media (max-width: 500px) {
-    font-size: 14px;
-  }
-
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
   padding-block: 1.2rem;
   padding-inline: 2rem;
 
@@ -60,6 +56,62 @@ header {
   }
 
   border-bottom: 1px solid black;
+  position: relative;
+}
+
+.nav-links {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.nav-toggle {
+  display: none;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0.4rem;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.hamburger span {
+  display: block;
+  width: 20px;
+  height: 1px;
+  background: black;
+}
+
+@media (max-width: 700px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    flex-direction: column;
+    align-items: stretch;
+    background: white;
+    border-bottom: 1px solid black;
+    padding: 0.8rem 1.2rem;
+    z-index: 10;
+  }
+
+  .nav-links .new-btn {
+    text-align: center;
+  }
+
+  .nav-toggle:checked ~ .nav-links {
+    display: flex;
+  }
 }
 
 header > a {
@@ -88,12 +140,6 @@ header > a {
 }
 
 footer {
-  font-size: 16px;
-
-  @media (max-width: 500px) {
-    font-size: 14px;
-  }
-
   display: flex;
   justify-content: center;
   margin-top: auto;
@@ -209,4 +255,153 @@ footer {
   background: transparent;
   cursor: default;
   padding: 6px 6px;
+}
+
+.page-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.page-heading > h1 {
+  margin-bottom: 0;
+}
+
+.page-heading.sub {
+  margin-top: 1.5rem;
+}
+
+.page-heading.sub h2 {
+  font-size: 18px;
+}
+
+.heading-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.inline-delete {
+  display: inline;
+}
+
+.delete-btn {
+  font-family: monospace;
+  font-size: inherit;
+  background: white;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.item-meta {
+  font-size: 14px;
+  margin-top: 0.5rem;
+}
+
+.item:hover {
+  background-color: rgba(1, 1, 1, 0.1);
+}
+
+.box-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+  max-width: 500px;
+  margin-inline: auto;
+  padding: 1rem;
+  border: 1px solid black;
+}
+
+.form-page {
+  width: 100%;
+  max-width: 500px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.input-wrapper > label {
+  font-size: 16px;
+}
+
+.input-wrapper > input,
+.input-wrapper > textarea,
+.input-wrapper > select {
+  font-family: monospace;
+  font-size: 14px;
+  padding: 0.3rem;
+  border: 1px solid black;
+  border-radius: 0;
+  background: white;
+}
+
+.input-wrapper > textarea {
+  field-sizing: content;
+  min-height: 120px;
+}
+
+.form-btn {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.4rem;
+  margin-top: 1rem;
+}
+
+.form-btn > button {
+  font-family: monospace;
+  padding: 0.4rem 0.8rem;
+  background-color: inherit;
+  border: 1px solid black;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.form-btn > button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.form-errors {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.6rem;
+  border: 1px solid black;
+}
+
+.error-list {
+  list-style-position: inside;
+}
+
+.detail-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1rem;
+  border: 1px solid black;
+  max-width: 600px;
+  width: 100%;
+  font-size: 16px;
+  word-break: break-word;
+}
+
+.detail-img {
+  max-width: 100%;
+  border: 1px solid black;
+}
+
+.detail-desc {
+  white-space: pre-wrap;
 }

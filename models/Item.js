@@ -7,7 +7,7 @@ export const Item = {
 
     const { rows } = await pool.query(
       `
-      SELECT items.id, items.category_id, categories.name, items.name,
+      SELECT items.id, items.category_id, categories.name AS category_name , items.name,
       items.description, items.stock, items.image_url, items.created_at, items.updated_at,
       COUNT(items.id) OVER() as total_count
       FROM items
@@ -26,9 +26,12 @@ export const Item = {
 
   async findById(id) {
     const { rows } = await pool.query(
-      `SELECT id, category_id, name, description, stock, image_url, created_at, updated_at
+      `SELECT items.id, items.category_id, categories.name AS category_name,
+       items.name, items.description, items.stock, items.image_url,
+       items.created_at, items.updated_at
        FROM items
-       WHERE id = $1`,
+       LEFT JOIN categories ON items.category_id = categories.id
+       WHERE items.id = $1`,
       [id],
     );
     return rows[0];
@@ -58,7 +61,7 @@ export const Item = {
   async create(categoryId, name, description, stock, imageUrl = null) {
     const { rows } = await pool.query(
       `INSERT INTO items(id, category_id, name, description, stock, image_url)
-       VALUES($1, $2, $3, $4, $5)
+       VALUES($1, $2, $3, $4, $5, $6)
        RETURNING *`,
       [randomUUIDv7(), categoryId, name, description, stock, imageUrl],
     );

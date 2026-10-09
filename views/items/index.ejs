@@ -9,11 +9,17 @@
     <div class="root">
       <%- include("../partials/header") %>
       <main>
-        <h1>Items</h1>
+        <div class="page-heading">
+          <h1>Items</h1>
+          <a class="new-btn" href="/items/create">New Item</a>
+        </div>
         <div class="items">
           <% if (items.length > 0) { %>
             <% items.forEach(item => { %>
-              <a href="items/<%- item.id %>" class="item"><%= item.name %></a>
+              <a href="/items/<%- item.id %>" class="item">
+                <strong><%= item.name %></strong>
+                <span class="item-meta"><%= item.category_name || "Uncategorized" %> — stock: <%= item.stock %></span>
+              </a>
             <% }) %>
           <% } else { %>
             <p class="empty">There's no items yet, start adding new item</p>

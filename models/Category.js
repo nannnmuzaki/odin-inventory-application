@@ -29,6 +29,15 @@ export const Category = {
     return rows[0];
   },
 
+  async findAllOptions() {
+    const { rows } = await pool.query(
+      `SELECT id, name
+       FROM categories
+       ORDER BY name ASC`,
+    );
+    return rows;
+  },
+
   async create(name) {
     const { rows } = await pool.query(
       `INSERT INTO categories(id, name)
