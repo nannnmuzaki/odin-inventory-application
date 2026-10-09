@@ -14,8 +14,7 @@ export const globalErrorHandler = (err, _req, res, _next) => {
     ? error.message
     : "Something went wrong on our end. Please try again later.";
 
-  res.status(statusCode).render("error", {
-    title: `Error ${statusCode}`,
+  res.status(statusCode).render("error-page", {
     statusCode,
     message: userMessage,
 

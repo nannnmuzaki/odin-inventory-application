@@ -5,6 +5,7 @@ import { loadEnvFile } from "node:process";
 import { categoriesRouter } from "./routes/categoriesRouter.js";
 import { itemsRouter } from "./routes/itemsRouter.js";
 import { globalErrorHandler } from "./middleware/globalErrorHandler.js";
+import { unmatchedRouteErrorHandler } from "./middleware/unmatchedRouteErrorHandler.js";
 
 try {
   loadEnvFile();
@@ -17,7 +18,12 @@ app.set("views", path.join(import.meta.dirname, "views"));
 app.set("view engine", "ejs");
 
 const assetsPath = path.join(import.meta.dirname, "public");
-app.use(express.static(assetsPath, { maxAge: "1d" }));
+app.use(
+  express.static(
+    assetsPath,
+    process.env.NODE_ENV === "production" ? { maxAge: "1d" } : { maxAge: 0 },
+  ),
+);
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -25,6 +31,7 @@ app.use("/", indexRouter);
 app.use("/categories", categoriesRouter);
 app.use("/items", itemsRouter);
 
+app.use(unmatchedRouteErrorHandler);
 app.use(globalErrorHandler);
 
 app.listen(PORT, () => {

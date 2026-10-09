@@ -1,0 +1,15 @@
+<form class="box-form" method="POST"
+  action="<%= formType === "edit" && category?.id
+    ? "/categories/" + category.id + "/edit"
+    : "/categories/create" %>">
+  <%- include("form-errors") %>
+  <div class="input-wrapper">
+    <label for="name">Name</label>
+    <input type="text" name="name" id="name" placeholder="Enter category name"
+      value="<%= category?.name ? category.name : "" %>" required maxlength="255">
+  </div>
+  <div class="form-btn">
+    <button type="reset">Reset</button>
+    <button type="submit"><%= formType === "edit" ? "Update" : "Create" %></button>
+  </div>
+</form>

@@ -1,0 +1,40 @@
+<form class="box-form" method="POST"
+  action="<%= formType === "edit" && item?.id
+    ? "/items/" + item.id + "/edit"
+    : "/items/create" %>">
+  <%- include("form-errors") %>
+  <div class="input-wrapper">
+    <label for="name">Name</label>
+    <input type="text" name="name" id="name" placeholder="Enter item name"
+      value="<%= item?.name ? item.name : "" %>" required maxlength="255">
+  </div>
+  <div class="input-wrapper">
+    <label for="categoryId">Category</label>
+    <select name="categoryId" id="categoryId" required>
+      <option value="">-- Select category --</option>
+      <% (categories || []).forEach(cat => { %>
+        <option value="<%= cat.id %>" <%= String(item?.categoryId || item?.category_id || "") === String(cat.id) ? "selected" : "" %>>
+          <%= cat.name %>
+        </option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="input-wrapper">
+    <label for="description">Description</label>
+    <textarea name="description" id="description" placeholder="Enter item description" required maxlength="1000"><%= item?.description ? item.description : "" %></textarea>
+  </div>
+  <div class="input-wrapper">
+    <label for="stock">Stock</label>
+    <input type="number" name="stock" id="stock" placeholder="0" min="0" step="1"
+      value="<%= item?.stock ?? "" %>" required>
+  </div>
+  <div class="input-wrapper">
+    <label for="imageUrl">Image URL (optional)</label>
+    <input type="url" name="imageUrl" id="imageUrl" placeholder="https://example.com/image.png"
+      value="<%= item?.imageUrl || item?.image_url || "" %>">
+  </div>
+  <div class="form-btn">
+    <button type="reset">Reset</button>
+    <button type="submit"><%= formType === "edit" ? "Update" : "Create" %></button>
+  </div>
+</form>

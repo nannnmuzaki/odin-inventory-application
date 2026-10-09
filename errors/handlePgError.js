@@ -1,3 +1,5 @@
+import { AppError } from "./AppError.js";
+
 export const handlePgError = (err) => {
   switch (err.code) {
     case "23503": // foreign_key_violation

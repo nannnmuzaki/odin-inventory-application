@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Error <%= statusCode %> | Odin Inventory Application</title>
+  </head>
+  <body>
+    <div class="root">
+      <%- include("partials/header") %>
+      <main>
+        <div class="error-page">
+        <h1><%= "Error " + statusCode + " : " + message %></h1>
+        <% if (devDetails) { %>
+          <p>
+            <strong>Message: </strong>
+            <%= devDetails.originalMessage %>
+          </p>
+          <p><strong>Error Code: </strong><%= devDetails.code %></p>
+          <p><strong>Stack Trace: </strong> <%= devDetails.stack %></p>
+        <% } %>
+        </div>
+      </main>
+      <%- include("partials/footer") %>
+    </div>
+  </body>
+</html>

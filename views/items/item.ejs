@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <title><%= item.name %> | Odin Inventory Application</title>
+  </head>
+  <body>
+    <div class="root">
+      <%- include("../partials/header") %>
+      <main>
+        <div class="item-page">
+          <div class="page-heading">
+            <h1><%= item.name %></h1>
+            <div class="heading-actions">
+              <a class="new-btn" href="/items/<%= item.id %>/edit">Edit</a>
+              <form method="POST" action="/items/<%= item.id %>/delete" class="inline-delete"
+                onsubmit="return confirm('Delete this item?');">
+                <button type="submit" class="new-btn delete-btn">Delete</button>
+              </form>
+            </div>
+          </div>
+          <div class="detail-box">
+            <% if (item.image_url) { %>
+              <img src="<%= item.image_url %>" alt="<%= item.name %>" class="detail-img">
+            <% } %>
+            <p><strong>Category:</strong>
+              <% if (item.category_id) { %>
+                <a href="/categories/<%= item.category_id %>"><%= item.category_name || item.category_id %></a>
+              <% } else { %>
+                Uncategorized
+              <% } %>
+            </p>
+            <p><strong>Stock:</strong> <%= item.stock %></p>
+            <p><strong>Description:</strong></p>
+            <p class="detail-desc"><%= item.description %></p>
+          </div>
+        </div>
+      </main>
+      <%- include("../partials/footer") %>
+    </div>
+  </body>
+</html>
